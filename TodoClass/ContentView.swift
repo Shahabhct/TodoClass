@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var todos = [Todo(title: "Feed the cat"),
+    @State private var todos = [Todo(title: "Feed the cat", subtitle: "Feed at 12 PM every day"),
                             Todo(title: "Play with cat", isCompleted: true),
                             Todo(title: "Get allergies"),
                             Todo(title: "Run away from cat", isCompleted: true),
@@ -23,8 +23,17 @@ struct ContentView: View {
                         .onTapGesture {
                             todo.isCompleted.toggle()
                         }
-                    Text(todo.title)
-                        .strikethrough(todo.isCompleted)
+                    VStack (alignment: .leading) {
+                        Text(todo.title)
+                            .strikethrough(todo.isCompleted)
+                        if !todo.subtitle.isEmpty{
+                            Text(todo.subtitle)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                                .strikethrough(todo.isCompleted)
+                        }
+                        
+                    }
                     
                    
                 }
