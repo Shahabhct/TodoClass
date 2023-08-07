@@ -17,6 +17,7 @@ struct TodoDetailView: View {
             TextField("Subtitle", text: $todo.subtitle)
                 .foregroundColor(.gray)
             Toggle("Completed?", isOn: $todo.isCompleted)
+            //Stepper(<#T##title: StringProtocol##StringProtocol#>, value: <#T##Binding<Strideable>#>)
         }
         .navigationTitle("Todo Detail")
     }
