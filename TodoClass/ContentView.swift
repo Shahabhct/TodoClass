@@ -15,48 +15,53 @@ struct ContentView: View {
                             Todo(title: "Run away from cat", isCompleted: true),
                             Todo(title: "Get a new cat")
     ]
+    // state varibale to she sheet to add new item
+    @State private var showsheet = false
+    
     var body: some View {
         NavigationStack {
-            List {
-                ForEach($todos) { $todo in
-                    NavigationLink {
-                        TodoDetailView(todo : $todo)
-                    } label: {
-                        HStack {
-                            Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
-                                .onTapGesture {
-                                    todo.isCompleted.toggle()
-                                }
-                            VStack (alignment: .leading) {
-                                Text(todo.title)
+            List($todos, editActions: [.all]) { $todo in
+                NavigationLink {
+                    TodoDetailView(todo : $todo)
+                } label: {
+                    HStack {
+                        Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
+                            .onTapGesture {
+                                todo.isCompleted.toggle()
+                            }
+                        VStack (alignment: .leading) {
+                            Text(todo.title)
+                                .strikethrough(todo.isCompleted)
+                            if !todo.subtitle.isEmpty{
+                                Text(todo.subtitle)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                                     .strikethrough(todo.isCompleted)
-                                if !todo.subtitle.isEmpty{
-                                    Text(todo.subtitle)
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                        .strikethrough(todo.isCompleted)
-                                }
-                                
                             }
                             
-                           
                         }
-                    }
                         
+                       
+                    }
                 }
-                .onDelete {IndexSet in
-                    todos.remove(atOffsets: IndexSet)
-                    //print("Deleted")
-                }
-                .onMove { originalOffset, newoffset in
-                    todos.move(fromOffsets: originalOffset, toOffset: newoffset)
-                }
+                    
             }
             .navigationTitle("Todos")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showsheet = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showsheet){
+                NewTodoView(sourcetodo: $todos)
+                    .presentationDetents([.medium])
             }
         }
 
