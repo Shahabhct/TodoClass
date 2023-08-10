@@ -9,18 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     
+   @StateObject var todoManager = TodoManager()
+    /*
     @State private var todos = [Todo(title: "Feed the eat", subtitle: "Feed at 12 PM every day"),
                             Todo(title: "Play with cat", isCompleted: true),
                             Todo(title: "Get allergies"),
                             Todo(title: "Run away from cat", isCompleted: true),
                             Todo(title: "Get a new cat")
     ]
+     */
     // state varibale to she sheet to add new item
     @State private var showsheet = false
     
     var body: some View {
         NavigationStack {
-            List($todos, editActions: [.all]) { $todo in
+            List($todoManager.todos, editActions: [.all]) { $todo in
                 TodoRowView(todo: $todo)
                     
             }
@@ -38,7 +41,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showsheet){
-                NewTodoView(sourcetodo: $todos)
+                NewTodoView(sourcetodo: $todoManager.todos)
                     .presentationDetents([.medium])
             }
         }
